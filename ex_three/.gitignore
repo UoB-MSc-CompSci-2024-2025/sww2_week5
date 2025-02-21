@@ -1,0 +1,5 @@
+# ./ex_three/.gitignore
+
+# system generated
+__pycache__
+.idea
