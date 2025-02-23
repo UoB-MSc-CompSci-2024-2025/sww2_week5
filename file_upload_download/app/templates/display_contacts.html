@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Contacts</h1>
+<table class="table">
+    {% for row in contacts %}
+    {% if loop.index0 == 0 %}
+    <thead>
+    <tr>
+        {% for item in row %}
+        <th>{{ item }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    {% else %}
+    <tr>
+        {% for item in row %}
+        <td>{{ item|e }}</td>
+        {% endfor %}
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+<h2 class="mt-5 mb-3">Download Updated File</h2>
+<form method="POST" action="{{ url_for('display_contacts') }}" novalidate>
+    {{ form.csrf_token() }}
+    {{ form.choice(value='NewContacts') }}
+    <input type="hidden" name="contacts" value="{{ contacts }}">
+    <button class="btn btn-primary" type="submit">Download</button>
+</form>
+{% endblock %}
