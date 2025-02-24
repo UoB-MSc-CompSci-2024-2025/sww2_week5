@@ -1,7 +1,7 @@
 # ./week_five/ex_three/app/views.py
 from flask import render_template, flash, url_for, redirect, request, send_file
 from ex_three.app import app
-from ex_three.app.forms import ChooseFrom, OptionForm, DownloadForm
+from ex_three.app.forms import ChooseFrom, OptionForm, DownloadForm, RadioForm
 
 import os
 import csv
@@ -139,7 +139,31 @@ def menu():
 
         return redirect(url_for('receipt', starter=starter, main=main, dessert=dessert))
 
-    return render_template('menu.html', title='Menu', menu=menu_info, form_menu=form_menu)
+    return render_template('menu.html', title='Menu Select', menu=menu_info, form_menu=form_menu)
+
+
+@app.route('/menu_radio', methods=['POST', 'GET'])
+def menu_radio():
+    menu_info = get_menu()
+    form_menu = RadioForm()
+
+    starters = get_starters()[0]
+    form_menu.starter.choices = starters
+
+    main = get_mains()[0]
+    form_menu.main.choices = main
+
+    dessert = get_desserts()[0]
+    form_menu.dessert.choices = dessert
+
+    if form_menu.validate_on_submit():
+        starter = form_menu.starter.data
+        main = form_menu.main.data
+        dessert = form_menu.dessert.data
+
+        return redirect(url_for('receipt', starter=starter, main=main, dessert=dessert))
+
+    return render_template('menu_radio.html', title='Menu Select', menu=menu_info, form_menu=form_menu)
 
 
 @app.route('/download_menu', methods=['POST', 'GET'])
